@@ -1,22 +1,31 @@
 local s = require 'say'
 local pretty = require 'pl.pretty'
 
+local colors
+
+if package.config:sub(1,1) == '\\' and not os.getenv("ANSICON") then
+  -- Disable colors on Windows.
+  colors = setmetatable({}, {__index = function() return function(s) return s end end})
+else
+  colors = require 'term.colors'
+end
+
 return function(options)
   local busted = require 'busted'
-  local handler = require 'busted.outputHandlers.base'()
+  local handler = require 'busted.outputhandlers.base'()
 
-  local successDot =  '+'
-  local failureDot =  '-'
-  local errorDot =  '*'
-  local pendingDot = '.'
+  local successDot = colors.green('●')
+  local failureDot = colors.red('◼')
+  local errorDot   = colors.magenta('✱')
+  local pendingDot = colors.yellow('◌')
 
   local pendingDescription = function(pending)
     local name = pending.name
 
-    local string = s('output.pending') .. ' -> ' ..
-      pending.trace.short_src .. ' @ ' ..
-      pending.trace.currentline  ..
-      '\n' .. name
+    local string = colors.yellow(s('output.pending')) .. ' → ' ..
+      colors.cyan(pending.trace.short_src) .. ' @ ' ..
+      colors.cyan(pending.trace.currentline)  ..
+      '\n' .. colors.bright(name)
 
     if type(pending.message) == 'string' then
       string = string .. '\n' .. pending.message
@@ -41,20 +50,20 @@ return function(options)
   end
 
   local failureDescription = function(failure, isError)
-    local string = s('output.failure') .. ' -> '
+    local string = colors.red(s('output.failure')) .. ' → '
     if isError then
-      string = s('output.error') .. ' -> '
+      string = colors.magenta(s('output.error')) .. ' → '
     end
 
     if not failure.element.trace or not failure.element.trace.short_src then
       string = string ..
-        failureMessage(failure) .. '\n' ..
-        failure.name
+        colors.cyan(failureMessage(failure)) .. '\n' ..
+        colors.bright(failure.name)
     else
       string = string ..
-        failure.element.trace.short_src .. ' @ ' ..
-        failure.element.trace.currentline .. '\n' ..
-        failure.name .. '\n' ..
+        colors.cyan(failure.element.trace.short_src) .. ' @ ' ..
+        colors.cyan(failure.element.trace.currentline) .. '\n' ..
+        colors.bright(failure.name) .. '\n' ..
         failureMessage(failure)
     end
 
@@ -103,11 +112,11 @@ return function(options)
 
     local formattedTime = ('%.6f'):format(sec):gsub('([0-9])0+$', '%1')
 
-    return successes .. ' ' .. successString .. ' / ' ..
-      failures .. ' ' .. failureString .. ' / ' ..
-      errors .. ' ' .. errorString .. ' / ' ..
-      pendings .. ' ' .. pendingString .. ' : ' ..
-      formattedTime .. ' ' .. s('output.seconds')
+    return colors.green(successes) .. ' ' .. successString .. ' / ' ..
+      colors.red(failures) .. ' ' .. failureString .. ' / ' ..
+      colors.magenta(errors) .. ' ' .. errorString .. ' / ' ..
+      colors.yellow(pendings) .. ' ' .. pendingString .. ' : ' ..
+      colors.bright(formattedTime) .. ' ' .. s('output.seconds')
   end
 
   handler.testEnd = function(element, parent, status, debug)
@@ -137,7 +146,7 @@ return function(options)
     return nil, true
   end
 
-  handler.suiteEnd = function()
+  handler.suiteEnd = function(suite, count, total)
     print('')
     print(statusString())
 

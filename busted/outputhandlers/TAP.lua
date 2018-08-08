@@ -2,7 +2,7 @@ local pretty = require 'pl.pretty'
 
 return function(options)
   local busted = require 'busted'
-  local handler = require 'busted.outputHandlers.base'()
+  local handler = require 'busted.outputhandlers.base'()
 
   local success = 'ok %u - %s'
   local failure = 'not ' .. success

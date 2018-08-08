@@ -3,7 +3,7 @@ local string = require("string")
 
 return function(options)
   local busted = require 'busted'
-  local handler = require 'busted.outputHandlers.base'()
+  local handler = require 'busted.outputhandlers.base'()
   local top = {
     start_tick = busted.monotime(),
     xml_doc = xml.new('testsuites', {

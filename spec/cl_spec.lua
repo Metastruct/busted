@@ -221,7 +221,7 @@ describe('Tests the busted command-line options', function()
   end)
 
   it('tests running with --output specified with module in lua path', function()
-    local success, errcnt = executeBusted('--pattern=cl_success.lua$ --output=busted.outputHandlers.TAP')
+    local success, errcnt = executeBusted('--pattern=cl_success.lua$ --output=busted.outputhandlers.TAP')
     assert.is_true(success)
     assert.is_equal(0, errcnt)
   end)

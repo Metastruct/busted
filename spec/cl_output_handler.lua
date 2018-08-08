@@ -2,7 +2,7 @@
 
 return function(options)
   local busted = require 'busted'
-  local handler = require 'busted.outputHandlers.base'()
+  local handler = require 'busted.outputhandlers.base'()
   local cli = require 'cliargs'
   local args = options.arguments
 

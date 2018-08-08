@@ -13,7 +13,7 @@ return function()
       elseif hasMoon and output:match('%.moon$') then
         handler = moonscript.dofile(path.normpath(output))
       else
-        handler = require('busted.outputHandlers.' .. output)
+        handler = require('busted.outputhandlers.' .. output)
       end
     end)
 
@@ -23,11 +23,11 @@ return function()
 
     if not success then
       busted.publish({ 'error', 'output' }, { descriptor = 'output', name = output }, nil, err, {})
-      handler = require('busted.outputHandlers.' .. options.defaultOutput)
+      handler = require('busted.outputhandlers.' .. options.defaultOutput)
     end
 
     if options.enableSound then
-      require 'busted.outputHandlers.sound'(options)
+      require 'busted.outputhandlers.sound'(options)
     end
 
     handler(options):subscribe(options)

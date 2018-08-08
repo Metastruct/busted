@@ -15,7 +15,7 @@ end
 
 return function(options)
   local busted = require 'busted'
-  local handler = require 'busted.outputHandlers.base'()
+  local handler = require 'busted.outputhandlers.base'()
 
   local repeatSuiteString = '\nRepeating all tests (run %u of %u) . . .\n\n'
   local randomizeString  = colors.yellow('Note: Randomizing test order with a seed of %u.\n')

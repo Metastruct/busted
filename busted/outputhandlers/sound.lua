@@ -1,7 +1,7 @@
 local app = require 'pl.app'
 return function(options)
   local busted = require 'busted'
-  local handler = require 'busted.outputHandlers.base'()
+  local handler = require 'busted.outputhandlers.base'()
   local language = require('busted.languages.' .. options.language)
 
   handler.suiteEnd = function()
